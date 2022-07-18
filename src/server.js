@@ -1,9 +1,12 @@
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const authentication = require('./api/authentication');
+const products = require('./api/products');
 const Database = require('./conf/Database');
 const AuthenticationService = require('./services/mysql/AuthenticationService');
+const ProductsService = require('./services/mysql/ProductService');
 const AuthenticationValidator = require('./validator/authentication');
+const ProductsValidator = require('./validator/authentication/products');
 
 const init = async () => {
   const database = new Database();
@@ -37,6 +40,11 @@ const init = async () => {
           service: authenticationService,
           validator: AuthenticationValidator,
         },
+        plugin: products,
+        options: {
+          service: ProductsService,
+          validator: ProductsValidator,
+        },
       }
     ]);
 
@@ -57,7 +65,7 @@ const init = async () => {
 
     return h.continue;
   });
-  
+
     await server.start();
     console.log(`Server running at ${server.info.uri}`);
     
