@@ -14,8 +14,9 @@ class AuthenticationService {
         const result = await this.#database.query(query);
     
         if (result.length > 0 || result.affectedRows > 0) {
-          throw new Error('Gagal menambahkan user, email telah digunakan');
+          throw new InvariantError('Gagal menambahkan user, email telah digunakan');
         }
+        
     }
 
     async register(email, name, password) {
@@ -31,7 +32,7 @@ class AuthenticationService {
         console.log(result);
     
         if (!result || result.length < 1 || result.affectedRows < 1) {
-          throw new Error('Gagal menambahkan user');
+          throw new InvariantError('Gagal menambahkan user');
         }
     
         return id;
@@ -43,7 +44,7 @@ class AuthenticationService {
         const result = await this.#database.query(query);
     
         if (!result || result.length < 1 || result.affectedRows < 1) {
-          throw new Error('User tidak ditemukan');
+          throw new NotFoundError('User tidak ditemukan');
         }
     
         return result[0];
@@ -55,7 +56,7 @@ class AuthenticationService {
         const result = await this.#database.query(query);
     
         if (!result || result.length < 1 || result.affectedRows < 1) {
-          throw new Error('Email atau password salah');
+          throw new AuthenticationError('Email atau password salah');
         }
     
         const { id, password: hashedPassword, role } = result[0];
@@ -63,7 +64,7 @@ class AuthenticationService {
         const isValid = await bcrypt.compare(password, hashedPassword);
     
         if (!isValid) {
-          throw new Error('Email atau password salah');
+          throw new AuthenticationError('Email atau password salah');
         }
     
         return { id, role };

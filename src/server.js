@@ -40,6 +40,24 @@ const init = async () => {
       }
     ]);
 
+    // extension
+  server.ext('onPreResponse', (request, h) => {
+    const {response} = request;
+
+    if (response instanceof ClientError) {
+      const newResponse = h.response({
+        status: 'fail',
+        message: response.message,
+      });
+      newResponse.code(response.statusCode);
+      return newResponse;
+    }
+
+    console.log(response);
+
+    return h.continue;
+  });
+  
     await server.start();
     console.log(`Server running at ${server.info.uri}`);
     
