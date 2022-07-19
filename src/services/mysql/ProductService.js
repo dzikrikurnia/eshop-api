@@ -1,4 +1,4 @@
-  const { nanoid } = require("nanoid");
+const { nanoid } = require("nanoid");
 const InvariantError = require("../../exceptions/InvariantError");
 const NotFoundError = require("../../exceptions/NotFoundError");
 
@@ -8,7 +8,7 @@ class ProductsService {
     constructor(database) {
       this.#database = database;
     }
-    async addProduct(title, price, description) {
+    async addProduct(userId, title, price, description) {
         const id = `product-${nanoid(16)}`
         const query = `INSERT INTO products (id, title, price, description, image)
           VALUES (
@@ -27,12 +27,16 @@ class ProductsService {
     
         return id;
       }
-      async getAllProducts() {
-        const query = 'SELECT * FROM products';
+      async getProductById(id) {
+        const query = `SELECT * FROM products WHERE id = '${id}'`;
     
         const result = await this.#database.query(query);
     
-        return result;
+        if(!result || result.length < 1 || result.affectedRows < 1) {
+          throw new NotFoundError('Produk tidak ditemukan');
+        }
+    
+        return result[0];
       }
       async getAllProducts() {
         const query = 'SELECT * FROM products';

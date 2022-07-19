@@ -53,7 +53,7 @@ class AuthenticationHandler {
   }
 
   async getUser(request, h) {
-    const { id } = request.params;
+    const { id } = request.auth.credentials;
     const user = await this.#service.getUserById(id);
 
     return {
