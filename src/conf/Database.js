@@ -1,15 +1,16 @@
 require('dotenv').config();
 const mysql = require('mysql');
 
-class Database {
+class database {
+
     constructor() {
-        this.connection = mysql.createPool({
-            connectionLimit: 10,
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-          });
+      this.connection = mysql.createPool({
+        connectionLimit: 10,
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+      });
     }
 
     query(query) {
@@ -23,8 +24,8 @@ class Database {
           });
         });
       }
+  }
 
-}
+  
 
-
-module.exports = Database;
+  module.exports = database;

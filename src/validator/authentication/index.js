@@ -1,3 +1,4 @@
+const InvariantError = require('../../exceptions/InvariantError');
 const { RegisterPayloadSchema, LoginPayloadSchema } = require('./schema');
 
 const AuthenticationValidator = {

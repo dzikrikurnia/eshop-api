@@ -1,5 +1,8 @@
 const {nanoid} = require('nanoid');
 const bcrypt = require('bcrypt');
+const InvariantError = require('../../exceptions/InvariantError');
+const AuthenticationError = require('../../exceptions/AuthenticationError');
+const NotFoundError = require('../../exceptions/NotFoundError');
 
 class AuthenticationService {
     #database;
@@ -7,7 +10,6 @@ class AuthenticationService {
     constructor(database) {
       this.#database = database;
     }
-    
     async #verifyUserEmail(email) {
         const query = `SELECT email FROM users WHERE email = '${email}'`;
     
@@ -16,8 +18,7 @@ class AuthenticationService {
         if (result.length > 0 || result.affectedRows > 0) {
           throw new InvariantError('Gagal menambahkan user, email telah digunakan');
         }
-        
-    }
+      }
 
     async register(email, name, password) {
         await this.#verifyUserEmail(email);
@@ -37,7 +38,6 @@ class AuthenticationService {
     
         return id;
     }
-
     async getUserById(userId) {
         const query = `SELECT name, email FROM users WHERE id = '${userId}'`;
     
@@ -49,7 +49,6 @@ class AuthenticationService {
     
         return result[0];
     }
-
     async login(email, password) {
         const query = `SELECT id, email, password, role FROM users WHERE email = '${email}'`;
     
@@ -69,7 +68,7 @@ class AuthenticationService {
     
         return { id, role };
     }
-
+   
   }
   
   module.exports = AuthenticationService;

@@ -1,3 +1,7 @@
+  const { nanoid } = require("nanoid");
+const InvariantError = require("../../exceptions/InvariantError");
+const NotFoundError = require("../../exceptions/NotFoundError");
+
 class ProductsService {
     #database;
   
@@ -30,16 +34,12 @@ class ProductsService {
     
         return result;
       }
-      async getProductById(id) {
-        const query = `SELECT * FROM products WHERE id = '${id}'`;
+      async getAllProducts() {
+        const query = 'SELECT * FROM products';
     
         const result = await this.#database.query(query);
     
-        if(!result || result.length < 1 || result.affectedRows < 1) {
-          throw new NotFoundError('Produk tidak ditemukan');
-        }
-    
-        return result[0];
+        return result;
       }
       async updateProductById(id, {title, price, description}) {
         const queryProduct = `SELECT id FROM products WHERE id = '${id}'`;
@@ -71,6 +71,7 @@ class ProductsService {
           throw new NotFoundError('Gagal menghapus produk, id tidak ditemukan');
         }
       }
+    
   }
   
   module.exports = ProductsService;
