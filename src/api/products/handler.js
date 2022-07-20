@@ -1,6 +1,7 @@
 
 class ProductsHandler {
     #ProductsService;
+    #storageService;
     #validator;
   
     constructor(service, validator) {
@@ -12,6 +13,7 @@ class ProductsHandler {
       this.getProductById = this.getProductById.bind(this);
       this.putProductById = this.putProductById.bind(this);
       this.deleteProductById = this.deleteProductById.bind(this);
+      this.putProductImageById = this.putProductImageById.bind(this);
     }
   
     async postProduct(request, h) {
@@ -82,6 +84,25 @@ class ProductsHandler {
           status: 'success',
           message: 'Produk berhasil dihapus',
         };
+    }
+
+    async putProductImageById(request, h) {
+      const { image } = request.payload;
+      const { id } = request.params;
+      await this.#validator.validateProductImageHeader(image.hapi.headers);
+  
+      const nameId = `productImage-${nanoid(16)}`;
+      const filename = await this.#storageService.writeFile(image, image.hapi, nameId);
+      const oldFileName = await this.#ProductsService.updateProductImageById(id, filename);
+  
+      if (oldFileName != null) {
+        await this.#storageService.deleteFile(oldFileName);
+      }
+  
+      return {
+        status: 'success',
+        message: 'Gambar produk berhasil diperbarui',
+      };
     }
   }
   
