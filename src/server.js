@@ -34,7 +34,7 @@ const init = async () => {
   const productsService = new ProductsService(database);
   const cartsService = new CartsService(database);
   const transactionsService = new TransactionsService(database);
-  const storageService = new StorageService(path.resolve(__dirname, '/api/products/images'));
+  const storageService = new StorageService(path.resolve(__dirname + '/api/products/images'));
 
   const server = Hapi.server({
     host: process.env.HOST,

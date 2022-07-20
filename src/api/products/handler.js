@@ -4,8 +4,9 @@ class ProductsHandler {
     #storageService;
     #validator;
   
-    constructor(service, validator) {
-      this.#ProductsService = service;
+    constructor(productsService, storageService, validator) {
+      this.#storageService = storageService;
+      this.#ProductsService = productsService;
       this.#validator = validator;
   
       this.postProduct = this.postProduct.bind(this);
