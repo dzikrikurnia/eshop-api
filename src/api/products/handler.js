@@ -1,3 +1,4 @@
+const { nanoid } = require("nanoid");
 
 class ProductsHandler {
     #ProductsService;
