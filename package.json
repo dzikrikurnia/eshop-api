@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "nodemon ./src/server.js",
-    "migration": "node ./src/conf/migration.js"
+    "migration": "node ./src/conf/migration.js",
+    "start": "node ./src/server.js"
   },
   "author": "",
   "license": "ISC",
